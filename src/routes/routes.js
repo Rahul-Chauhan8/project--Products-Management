@@ -1,10 +1,13 @@
 const express=require("express")
 const router=express.Router()
 const userController=require("../controllers/userController")
+const productController = require('../controllers/productController')
+const cartController  = require('../controllers/cartController')
 
 
 const {authentication,authorization} = require('../middlewares/auth')
 
+/*------------------------------------------API's for userController-------------------------------------------*/
 
 router.post("/register", userController.createUser)
 
@@ -12,8 +15,18 @@ router.post("/login" , userController.loginuser)
 router.get("/user/:userId/profile",authentication,authorization, userController.getUser)
 
 router.put("/user/:userId/profile", authentication,authorization,  userController.updateUser)
-//// -------------------------------product Api's---------------------------------------------//
+/*------------------------------------------API's for productController-------------------------------------------*/
+router.post("/products", productController.createProduct)
+router.get("/products" , productController.getProducts)
+router.get("/products/:productId" , productController.getByProductId)
+router.put("/products/:productId" , productController.updateProduct)
+router.delete("/products/:productId" , productController.deleteProduct)
 
+/*------------------------------------------API's for cartController-------------------------------------------*/
+router.post("/users/:userId/cart",authentication,authorization, cartController.createCart)
+router.put("/users/:userId/cart" ,authentication,authorization, cartController.updateCart)
+router.get("/users/:userId/cart" ,authentication,authorization, cartController.getCartById)
+router.delete("/users/:userId/cart" ,authentication,authorization, cartController.DeleteCartById)
 
 
 
