@@ -13,6 +13,10 @@ exports.createUser = async function (req, res) {
     try {
       let data = req.body
       let profileImage = req.files
+
+      if( profileImage[0].fieldname != "profileImage"){
+        return res.status(400).send({ status: false, message: "please  provide key name as profileImage only" })
+      }
       
       if (Object.keys(data).length == 0) {
         return res.status(400).send({ status: false, message: "please  provide user details" })
@@ -235,6 +239,9 @@ exports.updateUser = async (req, res) => {
     let data = req.body
     let profileImage = req.files
     if( profileImage && profileImage.length > 0){
+      if( profileImage[0].fieldname != "profileImage"){
+        return res.status(400).send({ status: false, message: "please  provide key name as profileImage only" })
+      }
       data.profileImage = profileImage
     }
    

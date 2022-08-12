@@ -11,8 +11,8 @@ const isValidObjectId = function (objectId) {
 exports.createProduct = async function (req, res) {
     try {
         let productData = req.body
-        let image = req.files
-        let { title, description, price, currencyId, currencyFormat, isFreeShipping, productImage, style, availableSizes, installments } = productData
+        let productImage = req.files
+        let { title, description, price, currencyId, currencyFormat, isFreeShipping, style, availableSizes, installments } = productData
 
 
 
@@ -43,12 +43,20 @@ exports.createProduct = async function (req, res) {
         if (currencyId != "INR") {
             return res.status(400).send({ status: false, message: "please  provide currencyId INR only" })
         }
-        if (!isValid(currencyFormat)) {
-            return res.status(400).send({ status: false, message: "please  provide currencyFormat" })
+        if (!currencyFormat) {
+            currencyFormat = "₹"
+            productData.currencyFormat = currencyFormat
         }
         if (currencyFormat != "₹") {
             return res.status(400).send({ status: false, message: "please  provide currencyFormat ₹ only" })
         }
+
+        if (productImage.length == 0) {
+            return res.status(400).send({ status: false, message: "please  provide productImage" })
+        }
+        if( productImage[0].fieldname != "productImage"){
+            return res.status(400).send({ status: false, message: "please  provide key name as productImage only" })
+          }
 
         if (!validName(style)) {
             return res.status(400).send({ status: false, message: "please  enter style in correct format" })
@@ -63,9 +71,7 @@ exports.createProduct = async function (req, res) {
         if (! typeof (isFreeShipping) == Boolean) {
             return res.status(400).send({ status: false, message: "please  provide isFreeShipping in True or False" })
         }
-        if (image.length == 0) {
-            return res.status(400).send({ status: false, message: "please  provide productImage" })
-        }
+    
 
         if (availableSizes) {
             var array = ['S', 'XS', 'M', 'X', 'L', 'XXL', 'XL']
@@ -90,7 +96,7 @@ exports.createProduct = async function (req, res) {
             return res.status(400).send({ status: false, message: "title already exist" })
         }
 
-        let profileImage = await uploadFile(image[0])
+        let profileImage = await uploadFile(productImage[0])
 
         productData.productImage = profileImage
 
