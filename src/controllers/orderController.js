@@ -1,8 +1,8 @@
-const orderModel = require("../model/orderModel.js")
+const orderModel = require("../models/orderModel")
 const mongoose = require('mongoose')
-const cartModel = require("../model/cartModel")
-const { isValid } = require("../validation/validation.js")
-const userModel = require("../model/userModel.js")
+const cartModel = require("../models/cartModel")
+const { isValid } = require("../validator/validator")
+const userModel = require("../models/userModel.js")
 
 const isValidObjectId = function (objectId) {
     return mongoose.Types.ObjectId.isValid(objectId)
